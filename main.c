@@ -11,6 +11,6 @@
 #define BIT_CLEAR(__REG, __BIT) __REG &= ~(1 << __BIT)
 
 int main() {
-  BIT_SET(DDRB, 1);
-  BIT_SET(PORTB, 4);
+    BIT_SET(DDRB, 1);
+    BIT_SET(PORTB, 4);
 }
