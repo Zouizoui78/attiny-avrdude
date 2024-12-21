@@ -1,12 +1,23 @@
+CC=avr-gcc
+OBJCOPY=avr-objcopy
+
+INST_SET=attiny85
+PROGRAMMER=usbtiny
+TARGET=t85
+
+AVRDUDE_CMD=avrdude -c $(PROGRAMMER) -p $(TARGET)
+
 compile:
-	avr-gcc -Os -mmcu=attiny85 -Wall main.c -o main.o
+	$(CC) -Os -mmcu=$(INST_SET) -Wall main.c -o main.o
 
 hex: compile
-	avr-objcopy -O ihex -j.text -j.data main.o main.hex
+	$(OBJCOPY) -O ihex -j.text -j.data main.o main.hex
 
 asm:
-	avr-gcc -S -Os -mmcu=attiny85 -Wall main.c -o main.asm
+	$(CC) -S -Os -mmcu=$(INST_SET) -Wall main.c -o main.asm
 
 flash: hex
-	avrdude -c usbtiny -p t85 -U flash:w:main.hex:i
+	$(AVRDUDE_CMD) -U flash:w:main.hex:i
 
+fuses:
+	$(AVRDUDE_CMD) -U hfuse:r:-:b -U lfuse:r:-:b
