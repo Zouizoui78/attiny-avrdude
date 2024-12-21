@@ -1,2 +1,2 @@
-avr-gcc -Os -mmcu=attiny85 main.c -o main.o
+avr-gcc -Os -mmcu=attiny85 main.c -o main.o -Wall -Wextra
 avr-objcopy -O ihex -j.text -j.data main.o main.hex

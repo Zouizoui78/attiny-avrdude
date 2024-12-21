@@ -1,14 +1,23 @@
-#define F_CPU 8000000
-#include <util/delay.h>
-
 #include "bit.h"
-#include "io.h"
+#include "interrupt.h"
+#include "reg.h"
 
-void main(void) {
-    bit_set(DDRB, 1); // Set pin as output
+ISR(TIM1_OVF_VEC) {
+    bit_toggle(PORTB, 1);
+}
 
-    while (1) {
-        bit_toggle(PORTB, 1);
-        _delay_ms(1000);
-    }
+int main(void) {
+    // Configure pin as output
+    bit_set(DDRB, 1);
+
+    // Set timer 1 prescaler to 16384
+    *TCCR1 = 0b1111;
+
+    // Enable timer 1 overflow interrupt
+    bit_set(TIMSK, 2);
+
+    // Enable interrupts
+    sei();
+
+    while (1) {}
 }
