@@ -35,33 +35,34 @@ all: $(HEX)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
-	$(CC) -mmcu=$(INST_SET) $(CC_OPT) $< -o $@
+	@$(CC) -mmcu=$(INST_SET) $(CC_OPT) $< -o $@
 
 $(ASM_DIR)/%.asm: $(SRC_DIR)/%.c
 	@mkdir -p $(ASM_DIR)
-	$(CC) -mmcu=$(INST_SET) $(CC_OPT) -S $< -o $@
+	@$(CC) -mmcu=$(INST_SET) $(CC_OPT) -S $< -o $@
 
 # Include rules produced by -MMD -MP
 -include $(DEPS)
 
 $(HEX): $(OBJ)
-	$(OBJCOPY) -O ihex -j.text -j.data $^ $@
+	@$(OBJCOPY) -O ihex -j.text -j.data $^ $@
 
 asm: $(ASM)
 
 flash: $(HEX)
-	$(AVRDUDE_CMD) -U flash:w:$<:i
+	@$(AVRDUDE_CMD) -U flash:w:$<:i
 
-fuseb:
-	$(AVRDUDE_CMD) -U hfuse:r:-:b -U lfuse:r:-:b
+fuses: FUSES=$(shell $(AVRDUDE_CMD) -qq -U hfuse:r:-:b -U lfuse:r:-:b)
+fuses:
+	@./scripts/fuses.sh $(FUSES)
 
-fuseh:
-	$(AVRDUDE_CMD) -U hfuse:r:-:h -U lfuse:r:-:h
+fusesh:
+	@$(AVRDUDE_CMD) -qq -U hfuse:r:-:h -U lfuse:r:-:h
 
 size: $(HEX)
-	$(AVRSIZE) $<
+	@$(AVRSIZE) $<
 
 clean:
 	@rm -r build
 
-PHONY: all asm flash fuseb fuseh size clean
+PHONY: all asm flash fuses fusesh size clean
