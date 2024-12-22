@@ -8,7 +8,7 @@ if [[ $HFUSE != 0b* ]] || [[ $LFUSE != 0b* ]]; then
     exit 1
 fi
 
-echo "HFUSE"
+echo "HFUSE = $HFUSE ($(printf '0x%x\n' $HFUSE))"
 echo "   RSTDISBL $(cut -c 3-3 <<< $HFUSE)"
 echo "       DWEN $(cut -c 4-4 <<< $HFUSE)"
 echo "      SPIEN $(cut -c 5-5 <<< $HFUSE)"
@@ -19,7 +19,7 @@ echo "  BODLEVEL1 $(cut -c 9-9 <<< $HFUSE)"
 echo "  BODLEVEL0 $(cut -c 10-10 <<< $HFUSE)"
 
 echo ""
-echo "LFUSE"
+echo "LFUSE = $LFUSE ($(printf '0x%x\n' $LFUSE))"
 echo "     CKDIV8 $(cut -c 3-3 <<< $LFUSE)"
 echo "      CKOUT $(cut -c 4-4 <<< $LFUSE)"
 echo "       SUT1 $(cut -c 5-5 <<< $LFUSE)"

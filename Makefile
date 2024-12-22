@@ -7,6 +7,26 @@ INST_SET=attiny85
 PROGRAMMER=usbtiny
 TARGET=t85
 
+RSTDISBL=1
+DWEN=1
+SPIEN=0
+WDTON=1
+EESAVE=1
+BODLEVEL2=1
+BODLEVEL1=1
+BODLEVEL0=1
+HFUSE=0b$(RSTDISBL)$(DWEN)$(SPIEN)$(WDTON)$(EESAVE)$(BODLEVEL2)$(BODLEVEL1)$(BODLEVEL0)
+
+CKDIV8=1
+CKOUT=1
+SUT1=1
+SUT0=0
+CKSEL3=0
+CKSEL2=0
+CKSEL1=1
+CKSEL0=0
+LFUSE=0b$(CKDIV8)$(CKOUT)$(SUT1)$(SUT0)$(CKSEL3)$(CKSEL2)$(CKSEL1)$(CKSEL0)
+
 CC_OPT=-Os
 # Generate dependency files (.d) in objects dir
 CC_OPT+=-MMD -MP
@@ -35,29 +55,29 @@ all: $(HEX)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
-	@$(CC) -mmcu=$(INST_SET) $(CC_OPT) $< -o $@
+	$(CC) -mmcu=$(INST_SET) $(CC_OPT) $< -o $@
 
 $(ASM_DIR)/%.asm: $(SRC_DIR)/%.c
 	@mkdir -p $(ASM_DIR)
-	@$(CC) -mmcu=$(INST_SET) $(CC_OPT) -S $< -o $@
+	$(CC) -mmcu=$(INST_SET) $(CC_OPT) -S $< -o $@
 
 # Include rules produced by -MMD -MP
 -include $(DEPS)
 
 $(HEX): $(OBJ)
-	@$(OBJCOPY) -O ihex -j.text -j.data $^ $@
+	$(OBJCOPY) -O ihex -j.text -j.data $^ $@
 
 asm: $(ASM)
 
 flash: $(HEX)
-	@$(AVRDUDE_CMD) -U flash:w:$<:i
+	$(AVRDUDE_CMD) -U flash:w:$<:i
 
-fuses: FUSES=$(shell $(AVRDUDE_CMD) -qq -U hfuse:r:-:b -U lfuse:r:-:b)
-fuses:
+fuse:
+	$(AVRDUDE_CMD) -U hfuse:w:$(HFUSE):m -U lfuse:w:$(LFUSE):m
+
+fuser: FUSES=$(shell $(AVRDUDE_CMD) -qq -U hfuse:r:-:b -U lfuse:r:-:b)
+fuser:
 	@./scripts/fuses.sh $(FUSES)
-
-fusesh:
-	@$(AVRDUDE_CMD) -qq -U hfuse:r:-:h -U lfuse:r:-:h
 
 size: $(HEX)
 	@$(AVRSIZE) $<
@@ -65,4 +85,4 @@ size: $(HEX)
 clean:
 	@rm -r build
 
-PHONY: all asm flash fuses fusesh size clean
+PHONY: all asm flash fuse fuser size clean
