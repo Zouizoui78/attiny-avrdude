@@ -7,7 +7,7 @@ typedef volatile unsigned char* reg_t;
 // The datasheet gives registers addresses relative to this
 #define REG_OFFSET 0x20
 
-#define REG(address) (reg_t)(REG_OFFSET + address)
+#define REG(address) (*(reg_t)(REG_OFFSET + address))
 
 
 // Power reduction

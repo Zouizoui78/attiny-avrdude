@@ -5,16 +5,10 @@
 
 typedef unsigned char bit_t;
 
-static inline void bit_set(reg_t reg, bit_t bit) {
-    *reg |= (1 << bit);
-}
+#define bv(shift) (1 << shift)
 
-static inline void bit_clear(reg_t reg, bit_t bit) {
-    *reg &= ~(1 << bit);
-}
-
-static inline void bit_toggle(reg_t reg, bit_t bit) {
-    *reg ^= (1 << bit);
-}
+#define bit_set(reg, bit) reg |= (1 << bit)
+#define bit_clear(reg, bit) reg &= ~(1 << bit);
+#define bit_toggle(reg, bit) reg ^= (1 << bit);
 
 #endif
