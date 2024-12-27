@@ -1,0 +1,13 @@
+BasedOnStyle: llvm
+
+AccessModifierOffset: -4
+AllowShortLambdasOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: Empty
+AlwaysBreakTemplateDeclarations: Yes
+BreakBeforeBraces: Custom
+BraceWrapping:
+  BeforeCatch: true
+  BeforeElse: true
+IndentAccessModifiers: false
+IndentWidth: 4
+InsertBraces: true
