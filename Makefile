@@ -79,10 +79,13 @@ fuser: FUSES=$(shell $(AVRDUDE_CMD) -qq -U hfuse:r:-:b -U lfuse:r:-:b)
 fuser:
 	@./scripts/fuses.sh $(FUSES)
 
+fuseraw:
+	@$(AVRDUDE_CMD) -qq -U hfuse:r:-:b -U lfuse:r:-:b
+
 size: $(HEX)
 	@$(AVRSIZE) $<
 
 clean:
 	@rm -r build
 
-PHONY: all asm flash fuse fuser size clean
+PHONY: all asm flash fuse fuser fuseraw size clean
