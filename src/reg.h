@@ -1,7 +1,7 @@
 #ifndef REG_H
 #define REG_H 1
 
-typedef volatile unsigned char* reg_t;
+typedef volatile unsigned char *reg_t;
 
 // Offset of the CPU registers
 // The datasheet gives registers addresses relative to this
@@ -9,14 +9,12 @@ typedef volatile unsigned char* reg_t;
 
 #define REG(address) (*(reg_t)(REG_OFFSET + address))
 
-
 // Power reduction
 #define PRR REG(0x20)
 #define PRTIM1 3
 #define PRTIM0 2
 #define PRUSI 1
 #define PRADC 0
-
 
 // IO //
 
@@ -31,13 +29,16 @@ typedef volatile unsigned char* reg_t;
 
 // Output pins data
 #define PORTB REG(0x18)
-#define PORTB5 5
-#define PORTB4 4
-#define PORTB3 3
-#define PORTB2 2
-#define PORTB1 1
-#define PORTB0 0
+#define PB5 5
+#define PB4 4
+#define PB3 3
+#define PB2 2
+#define PB1 1
+#define PB0 0
 
+// I2C pins
+#define SCK 2
+#define SDA 0
 
 // Interrupts //
 
@@ -60,5 +61,35 @@ typedef volatile unsigned char* reg_t;
 #define CS12 2
 #define CS11 1
 #define CS10 0
+
+// USI //
+
+// USI data buffer
+#define USIBR REG(0x10)
+
+// USI data
+#define USIDR REG(0x0F)
+
+// USI status
+#define USISR REG(0x0E)
+#define USISIF 7  // Start Interrupt Flag
+#define USIOIF 6  // Counter Overflow Interrupt Flag
+#define USIPF 5   // Stop condition flag
+#define USIDC 4   // Data output Collision
+#define USICNT3 3 // Counter bit 3
+#define USICNT2 2 // Counter bit 2
+#define USICNT1 1 // Counter bit 1
+#define USICNT0 0 // Counter bit 0
+
+// USI control
+#define USICR REG(0x0D)
+#define USISIE 7 // Start condition Interrupt Enable
+#define USIOIE 6 // Counter Overflow Interrupt Enable
+#define USIWM1 5 // Wire Mode 1
+#define USIWM0 4 // Wire Mode 0
+#define USICS1 3 // Clock Select 1
+#define USICS0 2 // Clock Select 0
+#define USICLK 1 // Clock pin
+#define USITC 0  // Toggle Clock
 
 #endif
